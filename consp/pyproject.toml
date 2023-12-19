@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hw"
+name = "consp"
 version = "0.1.0"
 description = ""
 authors = ["phenixua <112823718+phenixua@users.noreply.github.com>"]
@@ -12,11 +12,6 @@ uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 sqlalchemy = "^2.0.23"
 psycopg2 = "^2.9.9"
 alembic = "^1.13.0"
-asyncpg = "^0.29.0"
-pydantic = {extras = ["email"], version = "^2.5.2"}
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-passlib = "^1.7.4"
-libgravatar = "^1.0.4"
 
 
 [build-system]
