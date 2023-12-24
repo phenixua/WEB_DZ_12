@@ -3,6 +3,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.routes import auth
 from src.database.db import get_async_session
 from src.routes import contacts_api
 
@@ -18,7 +20,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+app.include_router(auth.router, prefix="/api")
 app.include_router(contacts_api.router, prefix="/api")
 app.include_router(contacts_api.router_search, prefix='/api')
 app.include_router(contacts_api.router_birthday, prefix='/api')

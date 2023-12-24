@@ -81,13 +81,17 @@ async def search_contact_query(query: str, db: AsyncSession):
         Contact.email.ilike(f'%{query}%')
     ))
     result = await db.execute(statement)
-    return result.scalars().all()
+    if result:
+        return result.scalars().all()
+    raise HTTPException(status_code=204, detail="No Content. The Search did not get results.")
 
 
 async def search_contact_by_field(field_name: str, field_value: str, db: AsyncSession):
     statement = select(Contact).where(getattr(Contact, field_name).ilike(f'%{field_value}%'))
     result = await db.execute(statement)
-    return result.scalars().all()
+    if result:
+        return result.scalars().all()
+    raise HTTPException(status_code=204, detail="No Content. The Search did not get results.")
 
 
 async def search_contact_by_birthdate(forward_shift_days: int, db: AsyncSession):
@@ -118,11 +122,12 @@ async def search_contact_by_birthdate(forward_shift_days: int, db: AsyncSession)
 
     if result:
         return result.scalars().all()
-
     raise HTTPException(status_code=204, detail="No Content. The Search did not get results.")
 
 
 async def _get_contact_by_id(contact_id: int, db: AsyncSession):
     statement = select(Contact).filter_by(id=contact_id)
     result = await db.execute(statement)
-    return await result.scalar_one_or_none()
+    if result:
+        return await result.scalar_one_or_none()
+    raise HTTPException(status_code=204, detail="No Content. The Search did not get results.")
