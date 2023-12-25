@@ -26,7 +26,7 @@ async def signup(body: UserSchema, db: AsyncSession = Depends(get_async_session)
 async def login(body: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_session)):
     user = await rep_users.get_user_by_email(body.username, db)
     if user is None or not auth_service.verify_password(body.password, user.password):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Wrong credentials")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
     access_token = await auth_service.create_access_token(data={"sub": user.email, "DB-class": "PSQL"})
     refresh_token = await auth_service.create_refresh_token(data={"sub": user.email})

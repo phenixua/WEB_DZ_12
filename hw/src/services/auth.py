@@ -15,8 +15,8 @@ class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     SECRET_KEY = "974790aec4ac460bdc11645decad4dce7c139b7f2982b7428ec44e886ea588c6"  # TODO: move to ENV file
     ALGORITHM = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES = 16
-    REFRESH_TOKEN_EXPIRE_DAYS = 7
+    ACCESS_TOKEN_MINUTES = 15
+    REFRESH_TOKEN_DAYS = 7
 
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
@@ -31,18 +31,16 @@ class Auth:
     @classmethod
     async def create_access_token(cls, data: dict, expires_delta: Optional[float] = None):
         to_encode = data.copy()
-        if expires_delta is None:
-            expires_delta = timedelta(minutes=cls.ACCESS_TOKEN_EXPIRE_MINUTES)
-        expire = datetime.utcnow() + timedelta(seconds=expires_delta)
+        expires_delta = expires_delta or timedelta(minutes=cls.ACCESS_TOKEN_MINUTES)
+        expire = datetime.utcnow() + expires_delta
         to_encode.update({"iat": datetime.utcnow(), "exp": expire, "scope": "access_token"})
         return jwt.encode(to_encode, cls.SECRET_KEY, algorithm=cls.ALGORITHM)
 
     @classmethod
     async def create_refresh_token(cls, data: dict, expires_delta: Optional[float] = None):
         to_encode = data.copy()
-        if expires_delta is None:
-            expires_delta = timedelta(days=cls.REFRESH_TOKEN_EXPIRE_DAYS)
-        expire = datetime.utcnow() + timedelta(seconds=expires_delta)
+        expires_delta = expires_delta or timedelta(days=cls.REFRESH_TOKEN_DAYS)
+        expire = datetime.utcnow() + expires_delta
         to_encode.update({"iat": datetime.utcnow(), "exp": expire, "scope": "refresh_token"})
         return jwt.encode(to_encode, cls.SECRET_KEY, algorithm=cls.ALGORITHM)
 

@@ -40,4 +40,4 @@ class ContactResponseSchema(BaseModel):
     birth_date: date
 
     class Config:
-        from_orm = True
+        from_attributes = True

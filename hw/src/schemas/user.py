@@ -1,5 +1,4 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Literal
 from src.entity.models import Role
 
 
@@ -17,10 +16,10 @@ class UserResponseSchema(BaseModel):
     avatar: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class TokenSchema(BaseModel):
     access_token: str
     refresh_token: str
-    token_type: Literal["jwt"] = "jwt"
+    token_type: str = "bearer"
